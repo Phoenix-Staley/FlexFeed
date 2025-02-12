@@ -1,0 +1,11 @@
+nav * {
+    color: black;
+}
+
+#left-header {
+    width: 85%;
+}
+
+#left-header a h1 {
+    text-align: center;
+}
