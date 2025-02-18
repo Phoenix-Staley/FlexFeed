@@ -2,10 +2,34 @@ nav * {
     color: black;
 }
 
+body {
+    padding-top: 5%;
+    padding-bottom: 5%;
+    margin-bottom: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    color: white;
+}
+
 #left-header {
     width: 85%;
 }
 
 #left-header a h1 {
     text-align: center;
+}
+
+.is-transparent {
+    background: rgba(0%, 0%, 100%, 0);
+}
+
+.logo:hover {
+    text-decoration: underline;
+    color: black;
 }
