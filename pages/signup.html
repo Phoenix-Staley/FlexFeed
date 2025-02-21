@@ -1,25 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
-    <script defer src="auth.js"></script>
+    <title>Sign Up - Bulma Form</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="../index.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style>
+        .signup-container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 5rem;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        .button.is-primary {
+            width: 100%;
+        }
+    </style>
 </head>
 
-<body>
-    <h2>Signup</h2>
-    <form id="signup-form">
-        <label for="username">Username:</label>
-        <input type="text" id="signup-username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="signup-password" required>
-        <br>
-        <button type="submit">Signup</button>
-    </form>
-    <p>Already have an account? <a href="login.html">Login here</a></p>
-</body>
+<body class="has-background-grey is-fullheight">
 
+    <!-- Header -->
+    <nav class="navbar is-fixed-top is-flex is-justify-content-space-between pt-3 px-3 has-background-info has-text-black has-text-weight-bold">
+        <div id="left-header navbar-brand">
+            <a href="/" class="logo">
+                <h1 class="has-text-weight-bold">Flex Feed</h1>
+            </a>
+        </div>
+        <div id="right-header">
+            <a href="/new_post" class="px-4">Login</a>
+            <a onclick="logout(event)" class="px-4">Sign up</a>
+        </div>
+    </nav>
+
+    <!-- Sign-Up Form -->
+    <div class="container is-flex is-justify-content-center">
+        <div class="signup-container">
+            <div class="logo">
+                <h2 class="title is-4">Create an Account</h2>
+            </div>
+            
+            <form>
+                <div class="field">
+                    <label class="label">Full Name</label>
+                    <div class="control has-icons-left">
+                        <input class="input" type="text" placeholder="Enter your full name" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control has-icons-left">
+                        <input class="input" type="email" placeholder="Enter your email" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Password</label>
+                    <div class="control has-icons-left">
+                        <input class="input" type="password" placeholder="Create a password" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Confirm Password</label>
+                    <div class="control has-icons-left">
+                        <input class="input" type="password" placeholder="Confirm your password" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="checkbox">
+                        <input type="checkbox" required>
+                        I agree to the <a href="#">Terms and Conditions</a>
+                    </label>
+                </div>
+
+                <div class="field">
+                    <button class="button is-primary">Sign Up</button>
+                </div>
+
+                <p class="has-text-centered">
+                    Already have an account? <a href="#">Sign In</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <footer class="navbar is-fixed-bottom is-flex is-justify-content-center py-1 has-background-grey-dark has-text-light">
+        <div class="is-flex is-flex-direction-column is-align-content-center has-text-centered">
+            <h1 class="has-text-weight-bold">Flex Feed</h1>
+            <p>Developed by Phoenix Staley, Ivan Duenas, and Nihal Thomas</p>
+            <p>© 2022</p>
+        </div>
+    </footer>
+
+    <script src="../index.js"></script>
+</body>
 </html>
