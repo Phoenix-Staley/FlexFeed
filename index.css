@@ -33,3 +33,14 @@ a:hover {
     text-decoration: underline;
     color: black;
 }
+
+.is-256x256 {
+    height: 256px;
+    width: 256px;
+}
+
+.has-black-border {
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+}
