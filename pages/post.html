@@ -4,6 +4,9 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="../index.css">
+
+    <!-- <script src="../index.js" defer></script> -->
+    <script src="./JS/loadPost.js" defer></script>
 </head>
 
 <body class="has-background-grey is-fullheight">
@@ -15,32 +18,26 @@
             </a>
         </div>
         <div id="right-header">
-            <a href="/new_post" class="px-4">Login</a>
-            <a onclick="logout(event)" class="px-4">Sign up</a>
+            <a href="/pages/login.html" class="px-4">Login</a>
+            <a onclick="" class="px-4">Sign up</a>
         </div>
     </nav>
     <div class="container is-half is-transparent">
         <div class="card mb-3 is-transparent has-black-border" id="post" data-id="16">
             <header class="card-header has-background-black is-flex is-justify-content-space-between">
-                <p class="card-header-title has-text-light">
-                    Is barbells the best ab workout?
-                </p>
+                <p class="card-header-title has-text-light" id="title"></p>
                 <p class="has-text-success pr-3 pt-3">
-                    <span class="has-text-white">Last updated: 2/18/2025</span>
+                    <span class="has-text-success" id="date"></span>
                     <span class="has-text-white">||</span>
-                    <span class="has-text-success">Posted: 2/18/25</span>
-                    <span class="has-text-white">||</span>
-                    <a href=""><span class="has-text-info">Phoenix</span></a>
+                    <a href=""><span class="has-text-info" id="author"></span></a>
                 </p>
             </header>
             <div class="card-content has-background-dark has-text-light">
                 <div id="img-wrapper">
-                    <img class="image is-256x256" src="../assets/landscape-placeholder.svg">
+                    <img id="img" class="image is-256x256" src="../assets/landscape-placeholder.svg">
                 </div>
                 <br>
-                <div class="content">
-                    No, barbells don't workout abs!
-                </div>
+                <div class="content" id="content"></div>
             </div>
             <div class="has-background-dark has-text-white px-5 pb-3 pt-3 has-black-border">
                 <div class="column is-half">
@@ -56,7 +53,7 @@
             <div class="has-black-border">
                 <h3 class="mt-5 mx-2 mb-1 box box-padding py-1 has-text-light has-background-dark has-text-centered">
                     Comments: </h3>
-                <div class="py-2 is-transparent">
+                <div class="py-2 is-transparent" id="comments">
                     <p class="mt-5 mx-2 mb-1 box box-padding p-5 has-text-light has-background-dark has-text-centered">
                         No comments yet</p>
                 </div>
