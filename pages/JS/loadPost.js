@@ -2,8 +2,10 @@ let post = new Post(
     "Example Title",
     "", // imageSrc, empty until backend is implemented
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ipsum dolor, bibendum porttitor sem quis, viverra laoreet ipsum. Cras eu lacus ac eros consectetur dapibus. Morbi aliquam maximus augue vitae imperdiet. Suspendisse efficitur egestas ipsum, quis tristique magna iaculis ut. Quisque viverra condimentum felis consequat lobortis.",
-    new Account("Phoenix123")
+    new User("Phoenix123")
 );
+
+document.getElementById("content").textContent = post.body;
 
 const exampleComment = new Comment("Phoenix", "1", "Lorum ipsum");
 
@@ -32,7 +34,12 @@ if (post.comments.length > 0) {
 
         header = comment.firstChild;
         header.querySelector(".author-wrapper").querySelector(".author").textContent = post.author.nickname;
+<<<<<<< HEAD
         header.querySelector(".date-wrapper").querySelector(".date").textContent = "Posted: " + post.publishDate.getDate();
+=======
+        header.querySelector(".date-wrapper").querySelector(".date").textContent =
+            "Posted: " + post.publishDate.getMonth() + "/" + post.publishDate.getDate() + "/" + post.publishDate.getFullYear();
+>>>>>>> 98f3c537b99a46befd1da8dea528f90360bfc2e0
 
         comment.lastChild.lastChild.textContent = post.body;
 
