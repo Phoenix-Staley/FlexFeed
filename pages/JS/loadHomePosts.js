@@ -1,42 +1,42 @@
 const posts = [
-    {
-        id: 1,
-        title: "Is squatting necessary?",
-        content: "Squats are fundamental for leg development and overall strength. They help build muscle, improve balance, and increase power in everyday activities.",
-        dateUpdated: "3/9/2024",
-        datePosted: "3/9/2024",
-        author: "Cassandra",
-    },
-    {
-        id: 2,
-        title: "Best protein intake",
-        content: "How much protein do you really need daily to maximize muscle repair and growth after your workout sessions?",
-        dateUpdated: "8/18/2022",
-        datePosted: "8/18/2022",
-        author: "Phoenix_Creator",
-    },
+  {
+    id: 1,
+    title: "Is squatting necessary?",
+    content: "Squats are fundamental for leg development and overall strength. They help build muscle, improve balance, and increase power in everyday activities.",
+    dateUpdated: "3/9/2024",
+    datePosted: "3/9/2024",
+    author: "Cassandra",
+  },
+  {
+    id: 2,
+    title: "Best protein intake",
+    content: "How much protein do you really need daily to maximize muscle repair and growth after your workout sessions?",
+    dateUpdated: "8/18/2022",
+    datePosted: "8/18/2022",
+    author: "Phoenix_Creator",
+  },
 ];
 
 // Helper function to truncate text to a given max length
 function truncateText(text, maxLength) {
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 }
 
 function loadPosts() {
-    const container = document.getElementById("postsContainer");
-    posts.forEach((post) => {
-        // Create a card for each post
-        const postElement = document.createElement("div");
-        postElement.className = "card mb-3 is-transparent";
+  const container = document.getElementById("postsContainer");
+  posts.forEach((post) => {
+    // Create a card for each post
+    const postElement = document.createElement("div");
+    postElement.className = "card mb-3 is-transparent";
 
-        // Truncate content to a max of 100 characters
-        const truncatedContent = truncateText(post.content, 100);
+    // Truncate content to a max of 100 characters
+    const truncatedContent = truncateText(post.content, 100);
 
-        postElement.innerHTML = `
+    postElement.innerHTML = `
           <!-- Card Header -->
           <header class="card-header has-background-black is-flex is-justify-content-space-between">
             <p class="card-header-title has-text-light">
-              ${post.title}
+              <a href="./pages/post.html">${post.title}</a>
             </p>
             <p class="has-text-success pr-3 pt-3">
               <span class="has-text-white">Last updated: ${post.dateUpdated}</span>
@@ -60,8 +60,8 @@ function loadPosts() {
             </div>
           </div>
         `;
-        container.appendChild(postElement);
-    });
+    container.appendChild(postElement);
+  });
 }
 
 // Load the posts when the page is loaded
