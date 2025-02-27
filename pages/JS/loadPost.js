@@ -6,6 +6,9 @@ let post = new Post(
 );
 
 document.getElementById("content").textContent = post.body;
+document.getElementById("title").textContent = post.title;
+document.getElementById("date").textContent = "Posted: " + post.publishDate.getMonth() + "/" + post.publishDate.getDate() + "/" + post.publishDate.getFullYear();
+document.getElementById("author").textContent = post.author.nickname;
 
 const exampleComment = new Comment("Phoenix", "1", "Lorum ipsum");
 
@@ -33,9 +36,10 @@ if (post.comments.length > 0) {
         </div>`
 
         header = comment.firstChild;
+        let Comment = post.comments[i]
         header.querySelector(".author-wrapper").querySelector(".author").textContent = post.author.nickname;
         header.querySelector(".date-wrapper").querySelector(".date").textContent =
-            "Posted: " + post.publishDate.getMonth() + "/" + post.publishDate.getDate() + "/" + post.publishDate.getFullYear();
+            "Posted: " + Comment.publishDate.getMonth() + "/" + Comment.publishDate.getDate() + "/" + Comment.publishDate.getFullYear();
 
         comment.lastChild.lastChild.textContent = post.body;
 
