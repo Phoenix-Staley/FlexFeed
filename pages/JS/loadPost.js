@@ -34,12 +34,8 @@ if (post.comments.length > 0) {
 
         header = comment.firstChild;
         header.querySelector(".author-wrapper").querySelector(".author").textContent = post.author.nickname;
-<<<<<<< HEAD
-        header.querySelector(".date-wrapper").querySelector(".date").textContent = "Posted: " + post.publishDate.getDate();
-=======
         header.querySelector(".date-wrapper").querySelector(".date").textContent =
             "Posted: " + post.publishDate.getMonth() + "/" + post.publishDate.getDate() + "/" + post.publishDate.getFullYear();
->>>>>>> 98f3c537b99a46befd1da8dea528f90360bfc2e0
 
         comment.lastChild.lastChild.textContent = post.body;
 
