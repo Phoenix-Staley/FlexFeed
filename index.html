@@ -1,13 +1,54 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="./index.css">
-    <script src="./index.js" defer></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flex Feed - Home</title>
+    <!-- Reset (optional) -->
+    <link rel="stylesheet" href="/css/reset.css" />
+    <!-- Bulma CSS Framework -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <!-- Custom CSS (optional) -->
+    <link rel="stylesheet" href="../index.css" />
+
+    <title>FlexFeed</title>
+
+    <script src="./pages/JS/changeHeader.js" defer></script>
+    <script src="./pages/JS/loadHomePosts.js" defer></script>
 </head>
 
-<body>
+<body class="has-background-grey is-fullheight">
+    <nav
+        class="navbar is-fixed-top is-flex is-justify-content-space-between pt-3 px-3 has-background-info has-text-black has-text-weight-bold">
+        <div id="left-header navbar-brand">
+            <a href="/" class="logo">
+                <h1 class="has-text-weight-bold">Flex Feed</h1>
+            </a>
+        </div>
+        <div id="right-header">
+            <a href="./pages/login.html" class="px-4">Login</a>
+            <a href="./pages/signup.html" class="px-4">Sign up</a>
+        </div>
+    </nav>
 
+    <!-- Container for the posts feed -->
+    <section class="has-background-grey is-fullheight">
+        <div class="container is-half is-transparent" style="padding-top: 5rem;" id="homeTitle">
+            <h2 class="title has-text-white">Gym Enthusiasts Feed</h2>
+            <div id="postsContainer"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+        class="navbar is-fixed-bottom is-flex is-justify-content-center py-1 has-background-grey-dark has-text-light">
+        <div class="is-flex is-flex-direction-column is-align-content-center has-text-centered">
+            <h1 class="has-text-weight-bold">Flex Feed</h1>
+            <p>Developed by Phoenix Staley, Ivan Duenas, and Nihal Thomas</p>
+            <p>© 2022</p>
+        </div>
+    </footer>
 </body>
 
 </html>

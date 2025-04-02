@@ -1,12 +1,102 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="../index.css">
+
+    <title>Make a Post - FlexFeed</title>
+
+    <script src="./JS/makePost.js" defer></script>
+    <script src="./JS/changeHeader.js" defer></script>
 </head>
 
-<body>
+<body class="has-background-grey is-fullheight">
+    <nav
+        class="navbar is-fixed-top is-flex is-justify-content-space-between pt-3 px-3 has-background-info has-text-black has-text-weight-bold">
+        <div id="left-header navbar-brand">
+            <a href="/" class="logo">
+                <h1 class="has-text-weight-bold">Flex Feed</h1>
+            </a>
+        </div>
+        <div id="right-header">
+            <a href="./login.html" class="px-4">Login</a>
+            <a href="./signup.html" class="px-4">Sign up</a>
+        </div>
+    </nav>
+    <div class="column m-auto is-half has-background-dark box" id="post_editor">
+        <h3 class="has-text-centered title has-text-white">New Post:</h3>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label has-text-white">Title</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" id="title" placeholder="What are the best ab workouts?">
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label has-text-white">Body</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <textarea class="textarea" id="body"
+                            placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label has-text-white">Image/Video</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="has-text-white" type="file" id="avatar" name="avatar"
+                            accept="image/png, image/jpeg video/*" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label">
+                <!-- Left empty for spacing -->
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary" onclick="addPost(event)">
+                            Post
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer
+        class="navbar is-fixed-bottom is-flex is-justify-content-center py-1 has-background-grey-dark has-text-light">
+        <div class="is-flex is-flex-direction-column is-align-content-center has-text-centered">
+            <h1 class="has-text-weight-bold">Flex Feed</h1>
+            <p>Developed by Phoenix Staley, Ivan Duenas, and Nihal Thomas</p>
+            <p>© 2022</p>
+        </div>
+    </footer>
+
+    <script src="../index.js"></script>
 </body>
 
 </html>
