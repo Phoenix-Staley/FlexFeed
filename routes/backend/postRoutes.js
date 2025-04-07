@@ -13,7 +13,15 @@ router.get('/:postID', async (req, res) => {
             res.status(400).json({ message: "Posts need a title and a body!" });
         }
 
-        const post = await Post.findByPk(req.params.postID);
+        // const post = await Post.findByPk(req.params.postID);
+        const post = await Post.findAll({
+            include: {
+                model: Comment,
+                where: {
+                    id: req.params.postID
+                }
+            }
+        });
 
         res.status(201).json(post);
     } catch (err) {
