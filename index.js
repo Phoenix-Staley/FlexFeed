@@ -1,3 +1,7 @@
+const express = require('express');
+const session = require('express-session');
+const routes = require('./controllers');
+
 class User {
     constructor(username) {
         this.posts = [];

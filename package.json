@@ -11,8 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "@sequelize/sqlite3": "^7.0.0-alpha.46",
+    "connect-session-sequelize": "^7.1.7",
     "express": "^5.1.0",
     "express-list-endpoints": "^7.1.1",
+    "express-session": "^1.18.1",
     "nodemon": "^3.1.9",
     "sequelize": "^6.37.7",
     "sqlite": "^5.1.1",
