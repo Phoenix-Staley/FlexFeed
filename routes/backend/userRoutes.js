@@ -13,6 +13,7 @@ router.post('/', async (req, res) => {
         const userData = {
             ...req.body,
             bio: '',
+            is_admin: false,
             created_at: new Date()
         }
 

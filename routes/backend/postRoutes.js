@@ -8,7 +8,18 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:postID', async (req, res) => {
+    try {
+        if (!req.body.title || !req.body.post_body) {
+            res.status(400).json({ message: "Posts need a title and a body!" });
+        }
 
+        const post = await Post.findByPk(req.params.postID);
+
+        res.status(201).json(post);
+    } catch (err) {
+        console.log(err);
+        res.status(400).json(err);
+    }
 });
 
 router.post('/', with_auth, async (req, res) => {
@@ -22,6 +33,7 @@ router.post('/', with_auth, async (req, res) => {
             content: req.body.body,
             media: req.body.media,
             user_id: req.session.username,
+            comments: [],
             created_at: new Date(),
         });
 
@@ -32,8 +44,21 @@ router.post('/', with_auth, async (req, res) => {
     }
 });
 
-router.delete('/', with_auth, async (req, res) => {
+router.delete('/:postID', with_auth, async (req, res) => {
+    try {
+        const post = await Post.findByPk(req.params.postID);
+        const user = await User.findOne({ where: { username: req.session.username } });
 
+        if (!user.is_admin && !(post.user_id == user.username)) {
+            res.status(400).json('You are not authorized to delete this post.');
+        }
+        else {
+            res.status(201).json(post);
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json(err);
+    }
 });
 
 module.exports = router;
