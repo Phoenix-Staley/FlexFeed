@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const { User } = require("../../models");
+const { User } = require('../../models');
 
 router.post('/', async (req, res) => {
     // create a new user
     try {
-        if (!req.body.name || !req.body.email || !req.body.city || !req.body.state) {
+        if (!req.body.username || !req.body.email) {
             res.status(400).json({ message: 'Request body must have a category_name property.' });
             console.log(req.body);
             return;
@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
 
         const userData = {
             ...req.body,
-            bio: "",
+            bio: '',
             created_at: new Date()
         }
 
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
         res.status(201).json(newUser);
     } catch (err) {
         console.log(err);
-        res.status(400).json("This person already signed this petition.");
+        res.status(400).json('This username or email is already taken.');
     }
 });
 
@@ -63,5 +63,15 @@ router.post('/login', async (req, res) => {
         res.status(400).json(err);
     }
 });
+
+router.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Logout failed');
+        }
+        res.redirect('/login');
+    });
+})
 
 module.exports = router;
