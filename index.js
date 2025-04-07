@@ -1,3 +1,8 @@
+const express = require('express');
+const listEndpoints = require('express-list-endpoints');
+const session = require('express-session');
+const routes = require('./controllers');
+
 class User {
     constructor(username) {
         this.posts = [];
@@ -26,14 +31,33 @@ class Post {
     }
 }
 
-let posts = [];
+const app = express();
+const PORT = 3001;
 
-for (let i = 0; i < 10; i++) {
-    posts.push(new Post(
-        "Example Title",
-        "",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ipsum dolor, bibendum porttitor sem quis, viverra laoreet ipsum. Cras eu lacus ac eros consectetur dapibus. Morbi aliquam maximus augue vitae imperdiet. Suspendisse efficitur egestas ipsum, quis tristique magna iaculis ut. Quisque viverra condimentum felis consequat lobortis.",
-        new Account("Rick")
-    ));
-}
+const sess = {
+    secret: 'Super secret secret',
+    logged_in: false,
+    cookie: {
+        maxAge: 3600000,
+        httpOnly: true,
+        sameSite: 'strict'
+    },
+    resave: false,
+    saveUninitialized: true,
+    store: new SequelizeStore({
+        db: sequelize
+    })
+};
 
+app.use(session(sess));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(routes);
+app.use(express.static("public"));
+
+app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}!`)
+    console.log(`Available endpoints:${listEndpoints(app).map((endpoint) => " " + endpoint.path)}`)
+});
