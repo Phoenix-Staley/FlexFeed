@@ -1,78 +1,72 @@
-const router = require('express').Router();
-const { User } = require('../../models');
+const express = require('express');
+const router = express.Router();
+const db = require('../../config/connection');
+const User = require('../../models/User');
 
-router.post('/', async (req, res) => {
-    // create a new user
-    try {
-        if (!req.body.username || !req.body.email) {
-            res.status(400).json({ message: 'Request body must have a category_name property.' });
-            console.log(req.body);
-            return;
-        }
+// SIGNUP
+router.post('/signup', async (req, res) => {
+  const { fullName, email, password } = req.body;
 
-        const userData = {
-            ...req.body,
-            bio: '',
-            is_admin: false,
-            created_at: new Date()
-        }
+  if (!fullName || !email || !password) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
 
-        const newUser = await User.create(userData);
-        res.status(201).json(newUser);
-    } catch (err) {
-        console.log(err);
-        res.status(400).json('This username or email is already taken.');
-    }
-});
-
-router.post('/login', async (req, res) => {
-    try {
-        // Find the user who matches the posted e-mail address
-        let user_data = await User.findOne({ where: { email: req.body.email } });
-
-        if (!user_data) {
-            const user_data_username = await User.findOne({ where: { username: req.body.email } });
-            if (!user_data_username) {
-                res
-                    .status(400)
-                    .json({ message: 'Incorrect email/username or password, please try again' });
-                return;
-            }
-            user_data = user_data_username;
-        }
-
-        // Verify the posted password with the password store in the database
-        const valid_password = await user_data.check_password(req.body.password);
-
-        if (!valid_password) {
-            res
-                .status(400)
-                .json({ message: 'Incorrect email/username or password, please try again' });
-            return;
-        }
-
-        // Create session variables based on the logged in user
-        req.session.save(() => {
-            req.session.user_id = user_data.id;
-            req.session.logged_in = true;
-
-            res.json({ user: user_data, message: 'You are now logged in!' });
-        });
-
-    } catch (err) {
-        console.log(err);
-        res.status(400).json(err);
-    }
-});
-
-router.post('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Error destroying session:', err);
-            return res.status(500).send('Logout failed');
-        }
-        res.redirect('/login');
+  try {
+    const user = await User.create({ fullName, email, password });
+    res.status(201).json({ message: 'User created', userId: user.id });
+  } catch (err) {
+    console.error('Signup error:', err);
+    res.status(400).json({
+      message: err.errors?.[0]?.message || 'Email already exists or invalid input',
     });
-})
+  }
+});
 
+// Export the router
 module.exports = router;
+
+//Login
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+  
+    // 💡 Basic validation
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+  
+    try {
+      const user = await User.findOne({ where: { email } });
+  
+      // Validate user + password
+      if (!user || user.password !== password) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+  
+      // ✅Optionally start a session (optional, safe to keep)
+      req.session.user_id = user.id;
+      req.session.logged_in = true;
+  
+      res.status(200).json({ message: 'Login successful', userId: user.id });
+    } catch (err) {
+      console.error('Login error:', err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
+  //Logout 
+  router.get('/session', (req, res) => {
+    res.json({
+      logged_in: req.session.logged_in || false,
+      user_id: req.session.user_id || null,
+    });
+  });
+  router.post('/logout', (req, res) => {
+    if (req.session.logged_in) {
+      req.session.destroy(() => {
+        res.status(204).end(); // No content
+      });
+    } else {
+      res.status(404).end();
+    }
+  });
+  
