@@ -61,7 +61,7 @@
                 <div class="field">
                     <label class="label">Full Name</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="Enter your full name" required>
+                        <input class="input" type="text" name="fullName" placeholder="Enter your full name" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-user"></i>
                         </span>
@@ -71,7 +71,7 @@
                 <div class="field">
                     <label class="label">Email</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="email" placeholder="Enter your email" required>
+                        <input class="input" type="email" name="email" placeholder="Enter your email" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-envelope"></i>
                         </span>
@@ -81,7 +81,7 @@
                 <div class="field">
                     <label class="label">Password</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="password" placeholder="Create a password" required>
+                        <input class="input" type="password" name="password" placeholder="Create a password" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
                         </span>
@@ -91,7 +91,7 @@
                 <div class="field">
                     <label class="label">Confirm Password</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="password" placeholder="Confirm your password" required>
+                        <input class="input" type="password" name="confirmPassword" placeholder="Confirm your password" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
                         </span>
@@ -101,12 +101,12 @@
                 <div class="field">
                     <label class="checkbox">
                         <input type="checkbox" required>
-                        I agree to the <a href="If we want this html link goes here ">Terms and Conditions</a>
+                        I agree to the <a href="#">Terms and Conditions</a>
                     </label>
                 </div>
 
                 <div class="field">
-                    <button class="button is-primary">Sign Up</button>
+                    <button class="button is-primary" type="submit">Sign Up</button>
                 </div>
 
                 <p class="has-text-centered">
@@ -126,6 +126,7 @@
     </footer>
 
     <script src="../index.js"></script>
+    <script src="./JS/signup.js"></script> 
 </body>
 
 </html>
