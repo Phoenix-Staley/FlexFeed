@@ -1,39 +1,20 @@
 const express = require('express');
+const session = require('express-session'); 
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const listEndpoints = require('express-list-endpoints');
-const session = require('express-session');
-const routes = require('./controllers');
-
-class User {
-    constructor(username) {
-        this.posts = [];
-        this.username = username;
-        this.nickname = username;
-    }
-}
-
-class Comment {
-    constructor(author, postId, content) {
-        this.author = author;
-        this.postId = postId;
-        this.content = content;
-        this.publishDate = new Date();
-    }
-}
-
-class Post {
-    constructor(title, imageSrc, body, author) {
-        this.title = title;
-        this.imageSrc = imageSrc;
-        this.body = body;
-        this.author = author;
-        this.publishDate = new Date();
-        this.comments = [];
-    }
-}
+const path = require('path');
+const sequelize = require('./config/connection');
+const { Post, Comment, User } = require('./models'); 
 
 const app = express();
 const PORT = 3001;
 
+// add body parsers before routes
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Session setup
+const sessionStore = new SequelizeStore({ db: sequelize });
 const sess = {
     secret: 'Super secret secret',
     logged_in: false,
@@ -44,20 +25,22 @@ const sess = {
     },
     resave: false,
     saveUninitialized: true,
-    store: new SequelizeStore({
-        db: sequelize
-    })
+    store: sessionStore
 };
 
 app.use(session(sess));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// added all the routes here
+app.use('/api/users', require('./routes/backend/userRoutes'));
 
-app.use(routes);
 app.use(express.static("public"));
 
-app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}!`)
-    console.log(`Available endpoints:${listEndpoints(app).map((endpoint) => " " + endpoint.path)}`)
+//database and start server
+sequelize.sync({ alter: true }).then(() => {
+    sessionStore.sync();
+    app.listen(PORT, () => {
+        console.log(`✅ Database synced`);
+        console.log(`App listening on port ${PORT}!`);
+        console.log(`Available endpoints:${listEndpoints(app).map((endpoint) => " " + endpoint.path)}`);
+    });
 });
