@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (session.logged_in) {
         const logoutBtn = document.createElement("button");
         logoutBtn.className = "button is-danger";
+        logoutBtn.style.marginTop = "-5px";
         logoutBtn.textContent = "Logout";
         logoutBtn.addEventListener("click", async () => {
           await fetch("/api/users/logout", { method: "POST" });
