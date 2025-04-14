@@ -65,4 +65,49 @@ function loadPosts() {
 }
 
 // Load the posts when the page is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const singlePostContainer = document.getElementById('singlePostContainer');
+  if (!singlePostContainer) {
+    console.error('singlePostContainer not found!');
+    return;
+  }
+
+  // Parse ?id= from the URL
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get('id');
+  if (!postId) {
+    singlePostContainer.textContent = 'No post ID provided in the URL!';
+    return;
+  }
+
+  // Fetch one post: GET /api/posts/:id
+  async function fetchSinglePost() {
+    try {
+      const res = await fetch(`/api/posts/${postId}`);
+      const data = await res.json();
+      if (!data.success) {
+        singlePostContainer.textContent = 'Post not found or error occurred!';
+        return;
+      }
+
+      const post = data.post;
+      singlePostContainer.innerHTML = `
+        <h3>Post #${post.id}</h3>
+        <p>${post.content}</p>
+        ${
+          post.imageUrl
+            ? `<img src="${post.imageUrl}" alt="Post Image" style="max-width:300px; display:block; margin-top:10px;" />`
+            : ''
+        }
+        <p><em>Created at: ${new Date(post.createdAt).toLocaleString()}</em></p>
+      `;
+    } catch (err) {
+      console.error('Error fetching single post:', err);
+      singlePostContainer.textContent = 'Error loading the post!';
+    }
+  }
+
+  fetchSinglePost();
+});
+
 loadPosts();
