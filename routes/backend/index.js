@@ -1,15 +1,18 @@
+// routes/index.js
 const express = require('express');
-const app = express();
+const router = express.Router();
 
-const router = require('express').Router();
+// Load sub-routes
 const userRoutes = require('./userRoutes');
 const postRoutes = require('./postRoutes');
 const commentRoutes = require('./commentRoutes');
-// const mediaRouter = require('./mediaRoutes'); // e.g., mediaRoutes.js
+const mediaRoutes = require('./mediaRoutes'); // <— file in the same folder
 
+// Attach sub-routes
 router.use('/user', userRoutes);
 router.use('/post', postRoutes);
 router.use('/comment', commentRoutes);
-// app.use('/media', mediaRouter);
+router.use('/media', mediaRoutes);
 
+// Export the main router
 module.exports = router;
