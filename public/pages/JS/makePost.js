@@ -1,70 +1,102 @@
 // makePost.js
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('makePostForm');
+  // Get form elements
+  const titleInput = document.getElementById('title');
+  const bodyInput = document.getElementById('body');
+  const mediaInput = document.getElementById('avatar');
+  
+  // Define the addPost function that's called in the HTML
+  window.addPost = async function(event) {
+    event.preventDefault();
     
-    if (!form) {
-      console.error('makePostForm not found on the page!');
+    // Validate inputs
+    if (!titleInput || !bodyInput) {
+      console.error('Required form fields not found!');
       return;
     }
     
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-  
-      // Get the text content
-      const contentInput = document.getElementById('content');
-      const contentValue = contentInput ? contentInput.value : '';
+    const title = titleInput.value.trim();
+    const content = bodyInput.value.trim();
+    
+    if (!title || !content) {
+      alert('Please enter both a title and post content!');
+      return;
+    }
+    
+    // Prepare post data
+    const postData = {
+      title: title,
+      content: content
+    };
+    
+    // Handle media upload if a file is selected
+    if (mediaInput && mediaInput.files.length > 0) {
+      const file = mediaInput.files[0];
       
-      // Get the file (if any)
-      const fileInput = document.getElementById('mediaFile');
-      let imageUrl = null;
-  
-      // 1) If the user selected a file, upload it to S3 first
-      if (fileInput && fileInput.files.length > 0) {
+      // Determine media type
+      const isImage = file.type.startsWith('image/');
+      const isVideo = file.type.startsWith('video/');
+      
+      if (isImage || isVideo) {
+        postData.type = isImage ? 'image' : 'video';
+        
+        // Create FormData for S3 upload
         const formData = new FormData();
-        // The field name in FormData must match `upload.single('media')` in mediaRoutes.js
-        formData.append('media', fileInput.files[0]);
-  
+        formData.append('media', file);
+        
         try {
-          const uploadRes = await fetch('/api/media/upload', {
+          // Upload media to S3 first
+          const uploadResponse = await fetch('/api/media/upload', {
             method: 'POST',
-            body: formData,
+            body: formData
           });
-          const uploadData = await uploadRes.json();
           
-          if (uploadData.success) {
-            imageUrl = uploadData.fileUrl; // S3 URL
-          } else {
-            alert('File upload failed: ' + (uploadData.message || 'Unknown error'));
-            return;
+          if (!uploadResponse.ok) {
+            throw new Error('Media upload failed');
           }
-        } catch (err) {
-          console.error('Error uploading file:', err);
-          alert('Error uploading file to S3.');
-          return;
+          
+          const uploadResult = await uploadResponse.json();
+          
+          if (uploadResult.success && uploadResult.fileUrl) {
+            // Add the S3 URL to the post data
+            postData.media = uploadResult.fileUrl;
+          } else {
+            throw new Error(uploadResult.message || 'Media upload failed');
+          }
+        } catch (error) {
+          console.error('Error uploading media to S3:', error);
+          alert('Failed to upload media. Post will be created without media.');
         }
       }
-  
-      // 2) Now create the post with content + optional imageUrl
-      try {
-        const createRes = await fetch('/api/posts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: contentValue, imageUrl }),
-        });
-        const createData = await createRes.json();
-  
-        if (createData.success) {
-          alert('Post created successfully!');
-          // Clear the form
-          if (contentInput) contentInput.value = '';
-          if (fileInput) fileInput.value = '';
-        } else {
-          alert('Failed to create post: ' + (createData.message || 'Unknown error'));
-        }
-      } catch (err) {
-        console.error('Error creating post:', err);
-        alert('Error creating post!');
+    }
+    
+    // Submit the post data - use POST method as specified in the requirements
+    try {
+      const response = await fetch('/api/post/', {
+        method: 'POST', // Changed from PUT to POST as per the requirements
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to create post: ${response.status} ${response.statusText}`);
       }
-    });
-  });
-  
+      
+      const result = await response.json();
+      
+      // Success! Clear form and redirect
+      alert('Post created successfully!');
+      titleInput.value = '';
+      bodyInput.value = '';
+      if (mediaInput) mediaInput.value = '';
+      
+      // Redirect to home page
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error creating post:', error);
+      alert('Failed to create post: ' + error.message);
+    }
+  };
+});
