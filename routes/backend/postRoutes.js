@@ -17,7 +17,7 @@ router.get('/:postID', async (req, res) => {
             return;
         }
 
-        post = { ...post, comments: [] };
+        post = { ...post.dataValues, comments: [] };
 
         const comments = await Comment.findAll({
             where: {
@@ -27,7 +27,7 @@ router.get('/:postID', async (req, res) => {
 
         post.comments = comments;
 
-        res.status(201).json(post.dataValues);
+        res.status(201).json(post);
     } catch (err) {
         console.log(err);
         res.status(400).json(err);
