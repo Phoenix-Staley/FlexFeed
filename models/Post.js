@@ -15,15 +15,19 @@ module.exports = (sequelize, DataTypes) => {
     },
     category: {
       type: DataTypes.ENUM('workout', 'meal'),
+      allowNull: true,
     },
     media: {
       type: DataTypes.STRING,
+      allowNull: true,
     },
     type: {
       type: DataTypes.ENUM('image', 'video'),
+      allowNull: true,
     },
     content: {
       type: DataTypes.TEXT,
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
