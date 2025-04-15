@@ -24,27 +24,35 @@ function truncateText(text, maxLength) {
 
 function loadPosts() {
   const container = document.getElementById("postsContainer");
-  posts.forEach((post) => {
-    // Create a card for each post
-    const postElement = document.createElement("div");
-    postElement.className = "card mb-3 is-transparent";
+  
+  // Fetch all posts from the API
+  fetch('/api/post/')
+    .then(response => response.json())
+    .then(posts => {
+      // Clear the container first
+      container.innerHTML = '';
+      
+      // Create a card for each post
+      posts.forEach((post) => {
+        const postElement = document.createElement("div");
+        postElement.className = "card mb-3 is-transparent";
 
-    // Truncate content to a max of 100 characters
-    const truncatedContent = truncateText(post.content, 100);
+        // Truncate content to a max of 100 characters
+        const truncatedContent = truncateText(post.content, 100);
 
-    postElement.innerHTML = `
+        postElement.innerHTML = `
           <!-- Card Header -->
           <header class="card-header has-background-black is-flex is-justify-content-space-between">
             <p class="card-header-title has-text-light">
-              <a href="./pages/post.html">${post.title}</a>
+              <a href="./pages/post.html?id=${post.id}">${post.title}</a>
             </p>
             <p class="has-text-success pr-3 pt-3">
-              <span class="has-text-white">Last updated: ${post.dateUpdated}</span>
+              <span class="has-text-white">Last updated: ${new Date(post.created_at).toLocaleDateString()}</span>
               <span class="has-text-white"> || </span>
-              <span class="has-text-success">Posted: ${post.datePosted}</span>
+              <span class="has-text-success">Posted: ${new Date(post.created_at).toLocaleDateString()}</span>
               <span class="has-text-white"> || </span>
               <a href="#">
-                <span class="has-text-info">${post.author}</span>
+                <span class="has-text-info">${post.username}</span>
               </a>
             </p>
           </header>
@@ -52,7 +60,9 @@ function loadPosts() {
           <!-- Card Content -->
           <div class="card-content has-background-dark has-text-light">
             <div id="img-wrapper">
-              <img id="img" class="image is-256x256" src="../assets/landscape-placeholder.svg" alt="Post Image">
+              ${post.media ? 
+                `<img id="img" class="image is-256x256" src="${post.media}" alt="Post Image">` : 
+                `<img id="img" class="image is-256x256" src="../assets/landscape-placeholder.svg" alt="Post Image">`}
             </div>
             <br>
             <div class="content" id="content">
@@ -60,54 +70,14 @@ function loadPosts() {
             </div>
           </div>
         `;
-    container.appendChild(postElement);
-  });
+        container.appendChild(postElement);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching posts:', error);
+      container.innerHTML = '<p class="has-text-white">Failed to load posts. Please try again later.</p>';
+    });
 }
 
 // Load the posts when the page is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  const singlePostContainer = document.getElementById('singlePostContainer');
-  if (!singlePostContainer) {
-    console.error('singlePostContainer not found!');
-    return;
-  }
-
-  // Parse ?id= from the URL
-  const params = new URLSearchParams(window.location.search);
-  const postId = params.get('id');
-  if (!postId) {
-    singlePostContainer.textContent = 'No post ID provided in the URL!';
-    return;
-  }
-
-  // Fetch one post: GET /api/posts/:id
-  async function fetchSinglePost() {
-    try {
-      const res = await fetch(`/api/posts/${postId}`);
-      const data = await res.json();
-      if (!data.success) {
-        singlePostContainer.textContent = 'Post not found or error occurred!';
-        return;
-      }
-
-      const post = data.post;
-      singlePostContainer.innerHTML = `
-        <h3>Post #${post.id}</h3>
-        <p>${post.content}</p>
-        ${
-          post.imageUrl
-            ? `<img src="${post.imageUrl}" alt="Post Image" style="max-width:300px; display:block; margin-top:10px;" />`
-            : ''
-        }
-        <p><em>Created at: ${new Date(post.createdAt).toLocaleString()}</em></p>
-      `;
-    } catch (err) {
-      console.error('Error fetching single post:', err);
-      singlePostContainer.textContent = 'Error loading the post!';
-    }
-  }
-
-  fetchSinglePost();
-});
-
-loadPosts();
+document.addEventListener('DOMContentLoaded', loadPosts);
