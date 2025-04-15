@@ -1,36 +1,37 @@
 // Load environment variables from .env file
-require('dotenv').config();
+//require('dotenv').config();
 
 const express = require('express');
 const router = express.Router();
-const AWS = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
+const { v4: uuidv4 } = require('uuid');
 
-// Configure AWS
+// Define AWS credentials directly
 const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,      // set in the .env
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,  // set in the .env
-  region: process.env.AWS_REGION || 'us-east-1'
+  accessKeyId: 'AKIA33EAVCUCDSLNF44J',
+  secretAccessKey: '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',
+  region: 'us-west-2'
 });
 
 // Configure multer to use multer-s3
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: process.env.AWS_S3_BUCKET_NAME, // set in the .env
-    acl: 'public-read', // or "private" if you prefer
+    bucket: 'flexfeed', 
+    acl: 'public-read',
     metadata: (req, file, cb) => {
       cb(null, { fieldName: file.fieldname });
     },
     key: (req, file, cb) => {
-      // Example: rename the file using current time + original extension
       const fileExtension = file.originalname.split('.').pop();
       const fileName = `${Date.now()}.${fileExtension}`;
       cb(null, fileName);
     }
   })
 });
+
 
 // POST /api/media/upload
 // Expects a form-data body with field name 'media'
@@ -60,7 +61,7 @@ router.post('/upload', upload.single('media'), (req, res) => {
 router.get('/:key', async (req, res) => {
   const { key } = req.params;
   const downloadParams = {
-    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Bucket: 'flexfeed',
     Key: key
   };
 
