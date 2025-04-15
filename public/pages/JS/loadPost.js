@@ -1,3 +1,92 @@
+// loadPost.js
+document.addEventListener('DOMContentLoaded', () => {
+  // Parse ?id= from the URL
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get('id');
+  if (!postId) {
+    document.getElementById('content').textContent = 'No post ID provided in the URL!';
+    return;
+  }
+
+  // Get elements
+  const contentEl = document.getElementById("content");
+  const titleEl = document.getElementById("title");
+  const dateEl = document.getElementById("date");
+  const authorEl = document.getElementById("author");
+  const imgEl = document.getElementById("img");
+  const commentsContainer = document.getElementById("comments");
+
+  // Show loading state
+  contentEl.textContent = "Loading post...";
+  
+  // Fetch the post by ID
+  fetch(`/api/post/${postId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(post => {
+      // Update post content
+      titleEl.textContent = post.title;
+      contentEl.textContent = post.content;
+      
+      // Format the date
+      const createdDate = new Date(post.created_at).toLocaleDateString();
+      dateEl.textContent = "Posted: " + createdDate;
+      
+      // Set author
+      authorEl.textContent = post.username;
+      
+      // Update image if available
+      if (post.media) {
+        imgEl.src = post.media;
+        imgEl.alt = post.title;
+      } else {
+        imgEl.src = "../assets/landscape-placeholder.svg";
+        imgEl.alt = "No image available";
+      }
+      
+      // Load comments if available
+      if (post.comments && post.comments.length > 0) {
+        commentsContainer.innerHTML = "";  // Clear "No comments yet" message
+        
+        post.comments.forEach(comment => {
+          const commentDate = new Date(comment.created_at).toLocaleDateString();
+          
+          const commentCard = document.createElement("div");
+          commentCard.className = "comment-box card has-background-dark has-text-light my-3";
+          commentCard.innerHTML = `
+            <header class="card-header has-background-black is-flex is-justify-content-space-between">
+              <p class="card-header-title has-text-light">${comment.username}</p>
+              <p class="has-text-success pr-3 pt-3">
+                Posted: ${commentDate}
+              </p>
+            </header>
+            <div class="card-content has-background-dark has-text-light">
+              <p class="comment-content">${comment.content}</p>
+            </div>
+          `;
+          
+          commentsContainer.appendChild(commentCard);
+        });
+      } else {
+        commentsContainer.innerHTML = `
+          <p class="mt-5 mx-2 mb-1 box box-padding p-5 has-text-light has-background-dark has-text-centered">
+            No comments yet
+          </p>
+        `;
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching post:', error);
+      contentEl.textContent = 'Error loading the post: ' + error.message;
+    });
+});
+
+
+/* 
 let post = new Post(
     "Example Title",
     "", // imageSrc, empty until backend is implemented
@@ -92,4 +181,4 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchSinglePost();
   });
   
-}
+} */
