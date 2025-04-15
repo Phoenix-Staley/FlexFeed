@@ -132,4 +132,6 @@ dist
 
 . DS_Store
 
-.env
+*.env
+*.sqlite
+.vscode/
