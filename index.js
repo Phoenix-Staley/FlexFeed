@@ -6,6 +6,8 @@ const path = require('path');
 const sequelize = require('./config/connection');
 const { Post, Comment, User } = require('./models');
 const routes = require('./routes');
+const commentRoutes = require('./routes/backend/commentRoutes');
+
 
 const app = express();
 const PORT = 3001;
@@ -35,7 +37,7 @@ app.use(session(sess));
 app.use('/api/users', require('./routes/backend/userRoutes'));
 
 app.use(express.static("public"));
-
+app.use('/api/comment', commentRoutes);
 app.use('/', routes);
 
 //database and start server
