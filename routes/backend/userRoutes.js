@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../config/connection');
-const User = require('../../models/User');
+const { User } = require('../../models');
 
 // SIGNUP
 router.post('/signup', async (req, res) => {
@@ -22,51 +22,50 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Export the router
-module.exports = router;
-
 //Login
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-  
-    // 💡 Basic validation
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+  const { email, password } = req.body;
+
+  // 💡 Basic validation
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
+  try {
+    const user = await User.findOne({ where: { email } });
+
+    // Validate user + password
+    if (!user || user.password !== password) {
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
-  
-    try {
-      const user = await User.findOne({ where: { email } });
-  
-      // Validate user + password
-      if (!user || user.password !== password) {
-        return res.status(401).json({ message: 'Invalid email or password' });
-      }
-  
-      // ✅Optionally start a session (optional, safe to keep)
-      req.session.user_id = user.id;
-      req.session.logged_in = true;
-  
-      res.status(200).json({ message: 'Login successful', userId: user.id });
-    } catch (err) {
-      console.error('Login error:', err);
-      res.status(500).json({ message: 'Server error' });
-    }
+
+    // ✅Optionally start a session (optional, safe to keep)
+    req.session.user_id = user.id;
+    req.session.logged_in = true;
+
+    res.status(200).json({ message: 'Login successful', userId: user.id });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+//Logout 
+router.get('/session', (req, res) => {
+  res.json({
+    logged_in: req.session.logged_in || false,
+    user_id: req.session.user_id || null,
   });
-  
-  //Logout 
-  router.get('/session', (req, res) => {
-    res.json({
-      logged_in: req.session.logged_in || false,
-      user_id: req.session.user_id || null,
+});
+router.post('/logout', (req, res) => {
+  if (req.session.logged_in) {
+    req.session.destroy(() => {
+      res.status(204).end(); // No content
     });
-  });
-  router.post('/logout', (req, res) => {
-    if (req.session.logged_in) {
-      req.session.destroy(() => {
-        res.status(204).end(); // No content
-      });
-    } else {
-      res.status(404).end();
-    }
-  });
-  
+  } else {
+    res.status(404).end();
+  }
+});
+
+// Export the router
+module.exports = router;
