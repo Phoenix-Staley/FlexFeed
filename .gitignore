@@ -133,6 +133,5 @@ dist
 . DS_Store
 
 *.env
-*.sqlite
+data/
 .vscode/
-data/database.sqlite

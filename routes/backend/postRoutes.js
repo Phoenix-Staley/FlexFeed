@@ -17,7 +17,7 @@ router.get('/:postID', async (req, res) => {
             return;
         }
 
-        post = { ...post, comments: [] };
+        post = { ...post.dataValues, comments: [] };
 
         const comments = await Comment.findAll({
             where: {
@@ -35,16 +35,19 @@ router.get('/:postID', async (req, res) => {
 });
 
 router.post('/', with_auth, async (req, res) => {
+    const poster = await User.findByPk(req.session.user_id);
+
     try {
         if (!req.body.title || !req.body.post_body) {
             res.status(400).json({ message: 'Posts need a title and a body!' });
+            return;
         }
 
         const new_post = await Post.create({
             title: req.body.title,
-            content: req.body.body,
+            content: req.body.post_body,
             media: req.body.media,
-            user_id: req.session.username,
+            username: poster.fullName,
             comments: [],
             created_at: new Date(),
         });
@@ -52,7 +55,7 @@ router.post('/', with_auth, async (req, res) => {
         res.status(201).json(new_post);
     } catch (err) {
         console.log(err);
-        res.status(400).json(err);
+        res.status(500).json("Error occured on the backend");
     }
 });
 
