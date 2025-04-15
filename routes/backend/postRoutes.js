@@ -3,25 +3,29 @@ const { Post, User, Comment } = require('../../models');
 const with_auth = require('../../utils/auth');
 
 router.get('/', async (req, res) => {
-    const post_data = await Post.findAll({ include: User, order: [['created_at']] });
-    res.send(200).json(post_data);
+    const post_data = await Post.findAll({ order: [['created_at']] });
+    res.status(200).json(post_data);
 });
 
 router.get('/:postID', async (req, res) => {
     try {
-        if (!req.body.title || !req.body.post_body) {
-            res.status(400).json({ message: "Posts need a title and a body!" });
+        // const post = await Post.findByPk(req.params.postID);
+        let post = await Post.findByPk(req.params.postID);
+
+        if (!post) {
+            res.status(404).send("No post with that ID found");
+            return;
         }
 
-        // const post = await Post.findByPk(req.params.postID);
-        const post = await Post.findAll({
-            include: {
-                model: Comment,
-                where: {
-                    id: req.params.postID
-                }
+        post = { ...post, comments: [] };
+
+        const comments = await Comment.findAll({
+            where: {
+                post_id: req.params.postID,
             }
         });
+
+        post.comments = comments;
 
         res.status(201).json(post);
     } catch (err) {
