@@ -16,6 +16,7 @@ router.post('/signup', async (req, res) => {
 
     req.session.user_id = user.id;
     req.session.logged_in = true;
+    req.session.username = user.fullName;
 
     res.status(201).json({ message: 'User created', userId: user.id });
   } catch (err) {
@@ -45,6 +46,7 @@ router.post('/login', async (req, res) => {
 
     req.session.user_id = user.id;
     req.session.logged_in = true;
+    req.session.username = user.fullName;
 
     res.status(200).json({ message: 'Login successful', userId: user.id });
   } catch (err) {
@@ -58,6 +60,7 @@ router.get('/session', (req, res) => {
   res.json({
     logged_in: req.session.logged_in || false,
     user_id: req.session.user_id || null,
+    username: req.session.username || "",
   });
 });
 router.post('/logout', (req, res) => {
