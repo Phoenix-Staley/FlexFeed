@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Login response:", result);
 
       if (response.ok) {
-        alert("Login successful!");
         window.location.href = "/index.html";
       } else {
         alert(`${result.message || result.error || 'Login failed.'}`);

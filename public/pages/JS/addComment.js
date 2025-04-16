@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Comment POST response:", result);
 
       if (response.ok) {
-        commentInput.value = ""; 
+        commentInput.value = "";
         const commentsContainer = document.getElementById("comments");
 
         const commentCard = document.createElement("div");
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `;
 
-        commentsContainer.appendChild(commentCard); 
+        commentsContainer.appendChild(commentCard);
       } else {
         alert(`❌ ${result.message || "Failed to add comment."}`);
       }

@@ -3,7 +3,7 @@ const { Post, User, Comment } = require('../../models');
 const with_auth = require('../../utils/auth');
 
 router.get('/', async (req, res) => {
-    const post_data = await Post.findAll({ order: [['created_at']] });
+    const post_data = await Post.findAll({ order: [['created_at', 'DESC']] });
     res.status(200).json(post_data);
 });
 

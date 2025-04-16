@@ -24,14 +24,14 @@ function truncateText(text, maxLength) {
 
 function loadPosts() {
   const container = document.getElementById("postsContainer");
-  
+
   // Fetch all posts from the API
   fetch('/api/post/')
     .then(response => response.json())
     .then(posts => {
       // Clear the container first
       container.innerHTML = '';
-      
+
       // Create a card for each post
       posts.forEach((post) => {
         const postElement = document.createElement("div");
@@ -44,7 +44,7 @@ function loadPosts() {
           <!-- Card Header -->
           <header class="card-header has-background-black is-flex is-justify-content-space-between">
             <p class="card-header-title has-text-light">
-              <a href="./pages/post.html?id=${post.id}">${post.title}</a>
+              <a href="/${post.id}">${post.title}</a>
             </p>
             <p class="has-text-success pr-3 pt-3">
               <span class="has-text-white">Last updated: ${new Date(post.created_at).toLocaleDateString()}</span>
@@ -59,12 +59,13 @@ function loadPosts() {
 
           <!-- Card Content -->
           <div class="card-content has-background-dark has-text-light">
-            <div id="img-wrapper">
-              ${post.media ? 
-                `<img id="img" class="image is-256x256" src="${post.media}" alt="Post Image">` : 
-                `<img id="img" class="image is-256x256" src="../assets/landscape-placeholder.svg" alt="Post Image">`}
+            
+              ${post.media ?
+            `<div id="img-wrapper">
+              <img id="img" class="image is-256x256" src="${post.media}" alt="Post Image">
             </div>
-            <br>
+            <br>` :
+            ``}
             <div class="content" id="content">
               ${truncatedContent}
             </div>
