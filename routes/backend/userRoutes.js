@@ -13,6 +13,10 @@ router.post('/signup', async (req, res) => {
 
   try {
     const user = await User.create({ fullName, email, password });
+
+    req.session.user_id = user.id;
+    req.session.logged_in = true;
+
     res.status(201).json({ message: 'User created', userId: user.id });
   } catch (err) {
     console.error('Signup error:', err);
@@ -39,7 +43,6 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // ✅Optionally start a session (optional, safe to keep)
     req.session.user_id = user.id;
     req.session.logged_in = true;
 
