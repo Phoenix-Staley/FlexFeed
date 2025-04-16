@@ -15,10 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const authorEl = document.getElementById("author");
   const imgEl = document.getElementById("img");
   const commentsContainer = document.getElementById("comments");
+  const imgWrapper = document.getElementById("img-wrapper");
 
   // Show loading state
   contentEl.textContent = "Loading post...";
-  
+
   // Fetch the post by ID
   fetch(`/api/post/${postId}`)
     .then(response => {
@@ -31,30 +32,29 @@ document.addEventListener('DOMContentLoaded', () => {
       // Update post content
       titleEl.textContent = post.title;
       contentEl.textContent = post.content;
-      
+
       // Format the date
       const createdDate = new Date(post.created_at).toLocaleDateString();
       dateEl.textContent = "Posted: " + createdDate;
-      
+
       // Set author
       authorEl.textContent = post.username;
-      
+
       // Update image if available
       if (post.media) {
         imgEl.src = post.media;
         imgEl.alt = post.title;
       } else {
-        imgEl.src = "../assets/landscape-placeholder.svg";
-        imgEl.alt = "No image available";
+        imgWrapper.innerHTML = "";
       }
-      
+
       // Load comments if available
       if (post.comments && post.comments.length > 0) {
         commentsContainer.innerHTML = "";  // Clear "No comments yet" message
-        
+
         post.comments.forEach(comment => {
           const commentDate = new Date(comment.created_at).toLocaleDateString();
-          
+
           const commentCard = document.createElement("div");
           commentCard.className = "comment-box card has-background-dark has-text-light my-3";
           commentCard.innerHTML = `
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="comment-content">${comment.content}</p>
             </div>
           `;
-          
+
           commentsContainer.appendChild(commentCard);
         });
       } else {
