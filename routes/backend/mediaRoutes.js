@@ -20,7 +20,6 @@ const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: 'flexfeed',
-    acl: 'public-read',
     metadata: (req, file, cb) => {
       cb(null, { fieldName: file.fieldname });
     },
@@ -54,6 +53,20 @@ router.post('/upload', upload.single('media'), (req, res) => {
       error
     });
   }
+});
+
+router.post('/upload', upload.single('media'), (req, res) => {
+  if (!req.file) {
+    console.error("No file uploaded.");
+    return res.status(400).json({ success: false, message: 'No file uploaded' });
+  }
+
+  console.log('File uploaded successfully:', req.file);
+
+  res.status(200).json({
+    success: true,
+    fileUrl: req.file.location
+  });
 });
 
 // GET /api/media/:key
