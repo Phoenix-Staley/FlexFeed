@@ -1,12 +1,7 @@
 // loadPost.js
 document.addEventListener('DOMContentLoaded', () => {
-  // Parse ?id= from the URL
-  const params = new URLSearchParams(window.location.search);
-  const postId = params.get('id');
-  if (!postId) {
-    document.getElementById('content').textContent = 'No post ID provided in the URL!';
-    return;
-  }
+  const pathSegments = window.location.pathname.split("/");
+  const postId = pathSegments[pathSegments.length - 1];
 
   // Get elements
   const contentEl = document.getElementById("content");

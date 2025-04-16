@@ -28,27 +28,27 @@ module.exports = router;
 
 
 router.put('/', async (req, res) => {
-    const { id, content } = req.body;
+  const { id, content } = req.body;
 
-    if (!id || !content) {
-        return res.status(400).json({ message: "Comment ID and content required." });
+  if (!id || !content) {
+    return res.status(400).json({ message: "Comment ID and content required." });
+  }
+
+  try {
+    const updated = await Comment.update(
+      { content },
+      { where: { id } }
+    );
+
+    if (updated[0] === 0) {
+      return res.status(404).json({ message: "Comment not found or no changes made." });
     }
 
-    try {
-        const updated = await Comment.update(
-            { content },
-            { where: { id } }
-        );
-
-        if (updated[0] === 0) {
-            return res.status(404).json({ message: "Comment not found or no changes made." });
-        }
-
-        res.status(200).json({ message: "Comment updated." });
-    } catch (err) {
-        console.error("PUT /api/comment error:", err);
-        res.status(500).json({ message: "Server error", error: err });
-    }
+    res.status(200).json({ message: "Comment updated." });
+  } catch (err) {
+    console.error("PUT /api/comment error:", err);
+    res.status(500).json({ message: "Server error", error: err });
+  }
 });
 
 

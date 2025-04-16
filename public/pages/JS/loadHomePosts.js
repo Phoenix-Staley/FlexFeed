@@ -44,7 +44,7 @@ function loadPosts() {
           <!-- Card Header -->
           <header class="card-header has-background-black is-flex is-justify-content-space-between">
             <p class="card-header-title has-text-light">
-              <a href="./pages/post.html?id=${post.id}">${post.title}</a>
+              <a href="/${post.id}">${post.title}</a>
             </p>
             <p class="has-text-success pr-3 pt-3">
               <span class="has-text-white">Last updated: ${new Date(post.created_at).toLocaleDateString()}</span>
