@@ -57,15 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const uploadResult = await uploadResponse.json();
 
-          if (uploadResult.success && uploadResult.fileUrl) {
-            // Add the S3 URL to the post data
-            postData.media = uploadResult.fileUrl;
+          // Check for successful upload
+          if (uploadResult.success) {
+            postData.media = uploadResult.fileUrl || uploadResult.url;
           } else {
-          
-          if (uploadResult.success && uploadResult.url) {
-            postData.media = uploadResult.url;
-          }          
-          else {
             throw new Error(uploadResult.message || 'Media upload failed');
           }
         } catch (error) {
