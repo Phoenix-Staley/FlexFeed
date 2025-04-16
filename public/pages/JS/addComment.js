@@ -31,24 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Comment POST response:", result);
 
       if (response.ok) {
-        commentInput.value = ""; 
-        const commentsContainer = document.getElementById("comments");
-
-        const commentCard = document.createElement("div");
-        commentCard.className = "comment-box card has-background-dark has-text-light my-3";
-        commentCard.innerHTML = `
-          <header class="card-header has-background-black is-flex is-justify-content-space-between">
-            <p class="card-header-title has-text-light">${result.username || "You"}</p>
-            <p class="has-text-success pr-3 pt-3">
-              Posted: ${new Date(result.created_at).toLocaleDateString()}
-            </p>
-          </header>
-          <div class="card-content has-background-dark has-text-light">
-            <p class="comment-content">${result.content}</p>
-          </div>
-        `;
-
-        commentsContainer.appendChild(commentCard); 
+        document.location.reload();
       } else {
         alert(`❌ ${result.message || "Failed to add comment."}`);
       }

@@ -7,9 +7,8 @@
 
     <title>Post - FlexFeed</title>
 
-    <!-- <script src="../index.js" defer></script> -->
-    <script src="./JS/loadPost.js" defer></script>
-    <script src="./JS/changeHeader.js" defer></script>
+    <script src="/pages/JS/loadPost.js" defer></script>
+    <script src="/pages/JS/authHeader.js" defer></script>
 </head>
 
 <body class="has-background-grey is-fullheight">
@@ -38,11 +37,11 @@
             <div class="card-content has-background-dark has-text-light">
                 <div id="img-wrapper">
                     <img id="img" class="image is-256x256" src="../assets/landscape-placeholder.svg">
+                    <br>
                 </div>
-                <br>
                 <div class="content" id="content"></div>
             </div>
-            <div class="has-background-dark has-text-white px-5 pb-3 pt-3 has-black-border">
+            <div class="has-background-dark has-text-white pb-3 pt-3 has-black-border">
                 <div class="column is-half">
                     <h3 class="mb-3">Comment:</h3>
                     <input
@@ -50,11 +49,11 @@
                         id="comment" type="text" placeholder="I agree!">
                     <button id="comment_btn"
                         class="mt-4 button is-small has-background-grey has-text-white is-info is-outlined has-text-weight-bold"
-                        <button id="comment_btn">Comment</button>
+                        id="comment_btn">Comment</button>
 
                 </div>
             </div>
-            <div class="has-black-border">
+            <div class="has-black-border px-5">
                 <h3 class="mt-5 mx-2 mb-1 box box-padding py-1 has-text-light has-background-dark has-text-centered">
                     Comments: </h3>
                 <div class="py-2 is-transparent" id="comments">
@@ -74,8 +73,7 @@
     </footer>
 
     <script src="../index.js"></script>
-    <script src="./JS/addComment.js" defer></script>
-
+    <script src="/pages/JS/addComment.js" defer></script>
 </body>
 
 </html>
