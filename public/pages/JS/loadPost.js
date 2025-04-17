@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const imgEl = document.getElementById("img");
   const commentsContainer = document.getElementById("comments");
   const imgWrapper = document.getElementById("img-wrapper");
+  const mediaWrapper = document.getElementById("media-wrapper");
 
   // Show loading state
   contentEl.textContent = "Loading post...";
@@ -37,8 +38,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Update image if available
       if (post.media) {
-        imgEl.src = post.media;
-        imgEl.alt = post.title;
+        imgWrapper.innerHTML = (
+          post?.media.slice(-3) == "mp4" ?
+            `<video width="320" height="240" controls="">
+                <source src="${post.media}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <br>` :
+            `<img id="img" class="image is-256x256" src="${post.media}" alt="Post Image">
+              <br>`
+        )
       } else {
         imgWrapper.innerHTML = "";
       }
