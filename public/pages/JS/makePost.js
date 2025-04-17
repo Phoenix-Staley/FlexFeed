@@ -1,15 +1,11 @@
-// makePost.js
 document.addEventListener('DOMContentLoaded', () => {
-  // Get form elements
   const titleInput = document.getElementById('title');
   const bodyInput = document.getElementById('body');
   const mediaInput = document.getElementById('avatar');
 
-  // Define the addPost function that's called in the HTML
   window.addPost = async function (event) {
     event.preventDefault();
 
-    // Validate inputs
     if (!titleInput || !bodyInput) {
       console.error('Required form fields not found!');
       return;
@@ -23,79 +19,80 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Prepare post data
     const postData = {
       title: title,
       post_body: content
     };
 
-    // Handle media upload if a file is selected
     if (mediaInput && mediaInput.files.length > 0) {
       const file = mediaInput.files[0];
-
-      // Determine media type
       const isImage = file.type.startsWith('image/');
       const isVideo = file.type.startsWith('video/');
 
       if (isImage || isVideo) {
         postData.type = isImage ? 'image' : 'video';
 
-        // Create FormData for S3 upload
         const formData = new FormData();
         formData.append('media', file);
 
         try {
-          // Upload media to S3 first
           const uploadResponse = await fetch('/api/media/upload', {
             method: 'POST',
             body: formData
           });
 
-          if (!uploadResponse.ok) {
-            throw new Error('Media upload failed');
-          }
+          console.log("📡 uploadResponse.status:", uploadResponse.status);
 
           const uploadResult = await uploadResponse.json();
+          console.log("📦 uploadResult:", uploadResult);
 
-          // Check for successful upload
-          if (uploadResult.success) {
-            postData.media = uploadResult.fileUrl || uploadResult.url;
+          if (uploadResult.success && uploadResult.fileUrl) {
+            postData.media = uploadResult.fileUrl;
           } else {
             throw new Error(uploadResult.message || 'Media upload failed');
           }
         } catch (error) {
-          console.error('Error uploading media to S3:', error);
+          console.error('❌ Error uploading media to S3:', error);
           alert('Failed to upload media. Post will be created without media.');
         }
       }
     }
 
-    // Submit the post data - use POST method as specified in the requirements
     try {
+      console.log("📤 Final postData being sent:", postData);
+    
       const response = await fetch('/api/post/', {
-        method: 'POST', // Changed from PUT to POST as per the requirements
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(postData)
       });
-
-      if (!response.ok) {
-        throw new Error(`Failed to create post: ${response.status} ${response.statusText}`);
+    
+      console.log("📡 /api/post response:", response);
+    
+      // Read raw body first
+      const rawText = await response.text();
+    
+      try {
+        const result = JSON.parse(rawText); // ✅ Only parse if valid
+        console.log("✅ Post creation result:", result);
+    
+        // Clear form and redirect
+        titleInput.value = '';
+        bodyInput.value = '';
+        if (mediaInput) mediaInput.value = '';
+        window.location.href = '/';
+      } catch (jsonErr) {
+        console.error('❌ JSON parse failed – raw HTML likely returned:');
+        console.log(rawText); // 👀 this is what we want to see
+        throw new Error(`Unexpected server response (likely 500 error)`);
       }
-
-      const result = await response.json();
-
-      // Success! Clear form and redirect
-      titleInput.value = '';
-      bodyInput.value = '';
-      if (mediaInput) mediaInput.value = '';
-
-      // Redirect to home page
-      window.location.href = '/';
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error('❌ Error creating post:', error);
       alert('Failed to create post: ' + error.message);
     }
+    
+    
   };
 });
