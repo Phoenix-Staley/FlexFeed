@@ -41,10 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
             body: formData
           });
 
-          console.log("📡 uploadResponse.status:", uploadResponse.status);
 
           const uploadResult = await uploadResponse.json();
-          console.log("📦 uploadResult:", uploadResult);
 
           if (uploadResult.success && uploadResult.fileUrl) {
             postData.media = uploadResult.fileUrl;
@@ -59,8 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      console.log("📤 Final postData being sent:", postData);
-    
+
       const response = await fetch('/api/post/', {
         method: 'POST',
         headers: {
@@ -68,16 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify(postData)
       });
-    
-      console.log("📡 /api/post response:", response);
-    
+
+
       // Read raw body first
       const rawText = await response.text();
-    
+
       try {
         const result = JSON.parse(rawText); // ✅ Only parse if valid
-        console.log("✅ Post creation result:", result);
-    
+
         // Clear form and redirect
         titleInput.value = '';
         bodyInput.value = '';
@@ -85,14 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '/';
       } catch (jsonErr) {
         console.error('❌ JSON parse failed – raw HTML likely returned:');
-        console.log(rawText); // 👀 this is what we want to see
         throw new Error(`Unexpected server response (likely 500 error)`);
       }
     } catch (error) {
       console.error('❌ Error creating post:', error);
       alert('Failed to create post: ' + error.message);
     }
-    
-    
+
+
   };
 });

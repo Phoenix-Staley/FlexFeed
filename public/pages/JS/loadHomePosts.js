@@ -60,11 +60,17 @@ function loadPosts() {
           <!-- Card Content -->
           <div class="card-content has-background-dark has-text-light">
             
-              ${post.media ?
-            `<div id="img-wrapper">
-              <img id="img" class="image is-256x256" src="${post.media}" alt="Post Image">
-            </div>
-            <br>` :
+          ${post.media ? (
+            post?.media.slice(-3) == "mp4" ?
+              `<video width="320" height="240" controls="">
+                  <source src="${post.media}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>` :
+              `<div id="img-wrapper">
+                <img id="img" class="image is-256x256" src="${post.media}" alt="Post Image">
+                </div>
+                <br>`
+          ) :
             ``}
             <div class="content" id="content">
               ${truncatedContent}
