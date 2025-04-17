@@ -1,3 +1,11 @@
+require('dotenv').config({ path: __dirname + '/accesscode.env' });
+console.log('🔐 AWS access key:', process.env.AWS_ACCESS_KEY_ID);
+
+if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+  console.error("❌ AWS credentials missing from environment!");
+  process.exit(1);
+}
+
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -6,10 +14,17 @@ const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 
 // AWS config – move to environment variables in production
-const s3 = new AWS.S3({
+/* const s3 = new AWS.S3({
   accessKeyId: 'AKIA33EAVCUCDSLNF44J',
   secretAccessKey: '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',
   region: 'us-west-2'
+});
+ */
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION
 });
 
 // Configure multer to use S3 storage
