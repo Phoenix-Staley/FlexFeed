@@ -6,7 +6,7 @@ const path = require('path');
 const s3 = new AWS.S3({
   accessKeyId: 'AKIA33EAVCUCDSLNF44J',
   secretAccessKey: 'o0Gi9DCuEjCRHI2hJZ8yejusmWMihVHRWviQigeY',
-  region: 'us-west-2', // change if your bucket is in another region
+  region: 'us-west-2', 
 });
 
 const filePath = '/Users/nihalthomas/screenshot.PNG';

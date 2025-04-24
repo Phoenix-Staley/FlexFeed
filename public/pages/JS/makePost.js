@@ -92,7 +92,5 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('❌ Error creating post:', error);
       alert('Failed to create post: ' + error.message);
     }
-    
-    
   };
 });
